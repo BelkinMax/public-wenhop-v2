@@ -251,7 +251,12 @@ export class Alpha3Codes {
   constructor() {}
 
   getByKey(key) {
+    // Fix api Germany abbr bug
+    if (key === "DEU") return this.GER;
+    //
+
     if (this[key]) return this[key];
+
     return "";
   }
 
