@@ -155,12 +155,7 @@ export default {
   async mounted() {
     this.allAgencyTypes = AGENCY_TYPES();
     this.allCountries = this.alphaCodes.all;
-
-    this.itemsPerPage = this.agenciesFiltes.itemsPerPage;
-    this.search = this.agenciesFiltes.search;
-    this.featured = this.agenciesFiltes.featured;
-    this.agencyType = this.agenciesFiltes.agencyType;
-    this.country = this.agenciesFiltes.country;
+    this.getFiltersFromStore();
 
     await this.fetchFiltered();
   },
@@ -224,8 +219,12 @@ export default {
 
       return resultArr.join(", ");
     },
-    test() {
-      console.log("GO");
+    getFiltersFromStore() {
+      this.itemsPerPage = this.agenciesFiltes.itemsPerPage;
+      this.search = this.agenciesFiltes.search;
+      this.featured = this.agenciesFiltes.featured;
+      this.agencyType = this.agenciesFiltes.agencyType;
+      this.country = this.agenciesFiltes.country;
     }
   }
 };
