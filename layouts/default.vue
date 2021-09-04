@@ -1,8 +1,9 @@
 <template>
-  <v-app dark>
+  <v-app>
+    <TheNavigation />
     <v-main>
       <v-container>
-        <nuxt />
+        <Nuxt />
       </v-container>
     </v-main>
   </v-app>

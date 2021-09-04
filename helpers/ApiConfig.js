@@ -28,6 +28,16 @@ export const AGENCY_TYPES = idOrName => {
     }
   ];
 
+  if (!idOrName) {
+    const typeNames = [];
+
+    types.forEach(element => {
+      typeNames.push(element.name);
+    });
+
+    return typeNames;
+  }
+
   if (typeof idOrName === "number") {
     let result = types.find(el => el.id === idOrName);
     return result.name;

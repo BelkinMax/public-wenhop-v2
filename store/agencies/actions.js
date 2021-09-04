@@ -5,7 +5,7 @@ import { AgenciesParams } from "@/helpers/ApiParams";
 export const actions = {
   handler: () => {},
 
-  async getAgencies({ commit }, paramsClass) {
+  async fetchAgencies({ commit }, paramsClass) {
     commit("SET_LOADING", true);
 
     if (!(paramsClass instanceof AgenciesParams)) {
