@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 import { AGENCY_TYPES } from "@/helpers/ApiConfig";
 import { Alpha3Codes } from "@/helpers/Alpha3Codes";
@@ -156,19 +156,30 @@ export default {
     this.allAgencyTypes = AGENCY_TYPES();
     this.allCountries = this.alphaCodes.all;
 
-    this.filterParams.addParams({
-      limit: this.itemsPerPage
-    });
+    this.itemsPerPage = this.agenciesFiltes.itemsPerPage;
+    this.search = this.agenciesFiltes.search;
+    this.featured = this.agenciesFiltes.featured;
+    this.agencyType = this.agenciesFiltes.agencyType;
+    this.country = this.agenciesFiltes.country;
 
-    await this.fetchAgencies(this.filterParams);
+    await this.fetchFiltered();
   },
   computed: {
-    ...mapGetters("agencies", ["agencies"])
+    ...mapGetters("agencies", ["agencies", "agenciesFiltes"])
   },
   methods: {
     ...mapActions("agencies", ["fetchAgencies"]),
+    ...mapMutations("agencies", ["SET_AGENCIES_FILTERS"]),
 
     async fetchFiltered() {
+      this.SET_AGENCIES_FILTERS({
+        search: this.search,
+        featured: this.featured,
+        agencyType: this.agencyType,
+        country: this.country,
+        itemsPerPage: this.itemsPerPage
+      });
+
       this.close();
 
       let country_code = "";

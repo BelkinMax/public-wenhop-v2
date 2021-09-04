@@ -45,6 +45,14 @@ const CLEAR_AGENCY = state => {
   state.agency = new Agency();
 };
 
+const SET_AGENCIES_FILTERS = (state, data) => {
+  if (data) {
+    Object.keys(data).forEach(key => {
+      if (key in state.filters) state.filters[key] = data[key];
+    });
+  }
+};
+
 const SET_LOADING = (state, data) => {
   if (typeof data === "boolean") {
     state.isLoading = data;
@@ -63,5 +71,6 @@ export default {
   SET_META,
   CLEAR_AGENCIES,
   CLEAR_AGENCY,
+  SET_AGENCIES_FILTERS,
   SET_LOADING
 };

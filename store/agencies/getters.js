@@ -6,6 +6,10 @@ const agency = state => {
   return state.agency;
 };
 
+const agenciesFiltes = state => {
+  return state.filters;
+};
+
 const agencyMeta = state => {
   return state.meta;
 };
@@ -17,6 +21,7 @@ const agencyIsLoading = state => {
 export default {
   agencies,
   agency,
+  agenciesFiltes,
   agencyMeta,
   agencyIsLoading
 };

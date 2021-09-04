@@ -18,6 +18,14 @@ const state = () => {
       previous: null
     },
 
+    filters: {
+      search: "",
+      featured: false,
+      agencyType: "",
+      country: "",
+      itemsPerPage: 9
+    },
+
     isLoading: false
   };
 };
