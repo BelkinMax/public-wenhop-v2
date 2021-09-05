@@ -92,7 +92,7 @@
       <div v-for="agency in agencies" :key="agency.id" class="col-4">
         <v-card hover class="mx-auto" height="100%">
           <v-img
-            :src="agency.image_url"
+            :src="agency.image_url || agencyPlaceholder"
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.9)"
             height="200px"
@@ -144,6 +144,8 @@ export default {
 
       filterParams: new AgenciesParams(),
       alphaCodes: new Alpha3Codes(),
+      agencyPlaceholder:
+        "https://maximbelkin.s3.eu-central-1.amazonaws.com/placeholder.jpg",
 
       search: "",
       featured: true,

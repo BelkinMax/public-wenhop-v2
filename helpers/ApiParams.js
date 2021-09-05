@@ -1,7 +1,7 @@
 class BaseParams {
   search = "";
   ordering = "";
-  limit = 10;
+  limit = 9;
   offset = 0;
 
   constructor() {}

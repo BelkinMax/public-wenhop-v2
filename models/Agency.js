@@ -19,12 +19,6 @@ class Agency {
   constructor(attributes) {
     if (attributes) {
       setAttributes(attributes, this);
-
-      // Add thumbnail placeholder if no img url
-      if (!this.image_url) {
-        this.image_url =
-          "https://maximbelkin.s3.eu-central-1.amazonaws.com/placeholder.jpg";
-      }
     }
   }
 
