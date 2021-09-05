@@ -46,8 +46,8 @@
                   ></v-autocomplete>
 
                   <v-select
-                    v-model="itemsPerPage"
-                    :items="itemsPerPageVariants"
+                    v-model="limit"
+                    :items="limitVariants"
                     label="Items per page"
                     hide-selected
                   ></v-select>
@@ -151,8 +151,8 @@ export default {
       allAgencyTypes: [],
       country: "",
       allCountries: [],
-      itemsPerPage: 9,
-      itemsPerPageVariants: [3, 9, 15, 30]
+      limit: 9,
+      limitVariants: [3, 9, 15, 30]
     };
   },
   watch: {
@@ -189,7 +189,7 @@ export default {
         featured: this.featured,
         agencyType: this.agencyType,
         country: this.country,
-        itemsPerPage: this.itemsPerPage
+        limit: this.limit
       });
 
       this.close();
@@ -206,7 +206,7 @@ export default {
       }
 
       this.filterParams.addParams({
-        limit: this.itemsPerPage,
+        limit: this.limit,
         search: this.search,
         featured: this.featured,
         agency_type,
@@ -217,7 +217,7 @@ export default {
     },
     reset() {
       this.$refs.agenciesForm.reset();
-      this.itemsPerPage = 9;
+      this.limit = 9;
       this.search = "";
       this.close();
       this.fetchFiltered();
@@ -237,7 +237,7 @@ export default {
       return resultArr.join(", ");
     },
     getFiltersFromStore() {
-      this.itemsPerPage = this.agenciesFiltes.itemsPerPage;
+      this.limit = this.agenciesFiltes.limit;
       this.search = this.agenciesFiltes.search;
       this.featured = this.agenciesFiltes.featured;
       this.agencyType = this.agenciesFiltes.agencyType;

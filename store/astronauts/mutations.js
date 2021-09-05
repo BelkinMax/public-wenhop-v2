@@ -1,20 +1,20 @@
 import StoreError from "@/models/helpers/StoreError";
-import Agency from "@/models/Agency";
+import Astronaut from "@/models/Astronaut";
 
-const SET_AGENCIES = (state, data) => {
+const SET_ASTRONAUTS = (state, data) => {
   if (Array.isArray(data)) {
-    data.forEach(agency => {
-      state.agencies.push(new Agency(agency));
+    data.forEach(astronaut => {
+      state.astronauts.push(new Astronaut(astronaut));
     });
   }
 };
 
-const SET_AGENCY = (state, data) => {
+const SET_ASTRONAUT = (state, data) => {
   if (data instanceof Object) {
-    state.agency = new Agency(data);
+    state.astronaut = new Astronaut(astronaut);
   } else {
     const error = new StoreError({
-      path: "agencies/mutations/SET_AGENCY",
+      path: "astronauts/mutations/SET_ASTRONAUT",
       message: `${data} is not an instance of Object type. Recieved ${typeof data}`
     });
     console.error(error);
@@ -30,22 +30,22 @@ const SET_META = (state, data) => {
     state.meta.previous = previous;
   } else {
     const error = new StoreError({
-      path: "agencies/mutations/SET_META",
+      path: "astronauts/mutations/SET_META",
       message: `${data} is not an instance of Object type. Recieved ${typeof data}`
     });
     console.error(error);
   }
 };
 
-const CLEAR_AGENCIES = state => {
-  state.agencies = [];
+const CLEAR_ASTRONAUTS = state => {
+  state.astronauts = [];
 };
 
-const CLEAR_AGENCY = state => {
-  state.agency = new Agency();
+const CLEAR_ASTRONAUT = state => {
+  state.astronaut = new Astronaut();
 };
 
-const SET_AGENCIES_FILTERS = (state, data) => {
+const SET_ASTRONAUTS_FILTERS = (state, data) => {
   if (data) {
     Object.keys(data).forEach(key => {
       if (key in state.filters) state.filters[key] = data[key];
@@ -58,7 +58,7 @@ const SET_LOADING = (state, data) => {
     state.isLoading = data;
   } else {
     const error = new StoreError({
-      path: "agencies/mutations/SET_LOADING",
+      path: "astronauts/mutations/SET_LOADING",
       message: `Expected ${data} to be of type "boolean". Recieved "${typeof data}"`
     });
     console.error(error);
@@ -66,11 +66,11 @@ const SET_LOADING = (state, data) => {
 };
 
 export default {
-  SET_AGENCIES,
-  SET_AGENCY,
+  SET_ASTRONAUTS,
+  SET_ASTRONAUT,
   SET_META,
-  CLEAR_AGENCIES,
-  CLEAR_AGENCY,
-  SET_AGENCIES_FILTERS,
+  CLEAR_ASTRONAUTS,
+  CLEAR_ASTRONAUT,
+  SET_ASTRONAUTS_FILTERS,
   SET_LOADING
 };

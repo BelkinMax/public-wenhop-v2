@@ -7,12 +7,12 @@ const ASTRONAUT_ID = id => `${BASE}/astronaut/${id}/`;
 
 const ApiRoutes = {
   Agencies: {
-    GetAgencies: AGENCIES,
-    GetOneAgency: id => AGENCY_ID(id)
+    GetAll: AGENCIES,
+    GetOne: id => AGENCY_ID(id)
   },
   Astronauts: {
-    GetAgencies: ASTRONAUTS,
-    GetOneAgency: id => ASTRONAUT_ID(id)
+    GetAll: ASTRONAUTS,
+    GetOne: id => ASTRONAUT_ID(id)
   }
 };
 

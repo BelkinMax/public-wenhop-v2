@@ -1,16 +1,13 @@
-//!! WARN  Cannot stringify arbitrary non-POJOs Agency
-//TODO Better not store class instance directly to the store to get rid of this warning
-
 import getters from "./getters";
 import mutations from "./mutations";
 import { actions } from "./actions";
 
-import Agency from "@/models/Agency";
+import Astronaut from "@/models/Astronaut";
 
 const state = () => {
   return {
-    agencies: [],
-    agency: new Agency(),
+    astronauts: [],
+    astronaut: new Astronaut(),
 
     meta: {
       count: 0,
@@ -20,9 +17,11 @@ const state = () => {
 
     filters: {
       search: "",
-      featured: true,
-      agencyType: "",
-      country: "",
+      agency__name: "",
+      status: "",
+      nationality: "",
+      date_of_birth: "",
+      date_of_death: "",
       limit: 9
     },
 

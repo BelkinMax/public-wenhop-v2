@@ -1,17 +1,17 @@
 import ApiRoutes from "@/helpers/ApiRoutes";
 import StoreError from "@/models/helpers/StoreError";
-import { AgenciesParams } from "@/helpers/ApiParams";
+import { AstronautsParams } from "@/helpers/ApiParams";
 
 export const actions = {
   handler: () => {},
 
-  async fetchAgencies({ commit }, paramsClass) {
+  async fetchAstronauts({ commit }, paramsClass) {
     commit("SET_LOADING", true);
 
-    if (!(paramsClass instanceof AgenciesParams)) {
+    if (!(paramsClass instanceof AstronautsParams)) {
       const error = new StoreError({
-        path: "agencies/actions/fetchAgencies",
-        message: `Use "AgenciesParams" class as a params object`
+        path: "astronauts/actions/fetchAstronauts",
+        message: `Use "AstronautsParams" class as a params object`
       });
 
       console.error(error);
@@ -23,7 +23,7 @@ export const actions = {
     const params = paramsClass.getParams();
 
     try {
-      const { data } = await this.$axios(ApiRoutes.Agencies.GetAll, {
+      const { data } = await this.$axios(ApiRoutes.Astronauts.GetAll, {
         params
       });
 
@@ -35,11 +35,11 @@ export const actions = {
         previous
       });
 
-      commit("CLEAR_AGENCIES");
-      commit("SET_AGENCIES", results);
+      commit("CLEAR_ASTRONAUTS");
+      commit("SET_ASTRONAUTS", results);
     } catch (e) {
       const error = new StoreError({
-        path: "agencies/actions/fetchAgencies",
+        path: "astronauts/actions/fetchAstronauts",
         message: e.message
       });
 
