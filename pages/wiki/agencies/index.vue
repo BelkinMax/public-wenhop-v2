@@ -3,12 +3,9 @@
     <section class="row">
       <div class="col-12">
         <v-toolbar flat>
-          <v-checkbox
-            v-model="featured"
-            label="Show only featured agencies"
-            hide-details
-            class="mr-6"
-          ></v-checkbox>
+          <v-toolbar-title class="mr-6 subtitle-2">{{
+            itemsFoundText
+          }}</v-toolbar-title>
 
           <v-text-field
             v-model="search"
@@ -19,9 +16,16 @@
             class="mr-6"
           ></v-text-field>
 
+          <v-checkbox
+            v-model="featured"
+            label="Show only featured agencies"
+            hide-details
+            class="mr-6"
+          ></v-checkbox>
+
           <v-menu v-model="menu" :close-on-content-click="false" offset-x>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
+              <v-btn fab dark small v-bind="attrs" v-on="on" color="primary">
                 <v-icon>mdi-filter-variant</v-icon>
               </v-btn>
             </template>
@@ -123,6 +127,15 @@
         </v-card>
       </div>
     </section>
+    <section class="row justify-center my-12">
+      <div class="text-center col-4">
+        <v-pagination
+          v-model="currentPage"
+          :length="totalPages"
+          circle
+        ></v-pagination>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -134,6 +147,7 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import { AGENCY_TYPES } from "@/helpers/ApiConfig";
 import { Alpha3Codes } from "@/helpers/Alpha3Codes";
 import { AgenciesParams } from "@/helpers/ApiParams";
+import { pagination } from "@/helpers/Pagination";
 
 export default {
   data() {
@@ -154,7 +168,12 @@ export default {
       country: "",
       allCountries: [],
       limit: 9,
-      limitVariants: [3, 9, 15, 30]
+      limitVariants: [3, 9, 15, 30],
+
+      totalItems: 0,
+      currentPage: 1,
+      totalPages: 0,
+      offset: 0
     };
   },
   watch: {
@@ -169,6 +188,9 @@ export default {
     },
     featured: function() {
       this.fetchFiltered();
+    },
+    currentPage: function(val) {
+      this.setPage(val);
     }
   },
   async mounted() {
@@ -179,7 +201,18 @@ export default {
     await this.fetchFiltered();
   },
   computed: {
-    ...mapGetters("agencies", ["agencies", "agenciesFiltes", "agencyMeta"])
+    ...mapGetters("agencies", ["agencies", "agenciesFiltes", "agencyMeta"]),
+
+    previousDisabled() {
+      return this.currentPage <= 1;
+    },
+    nextDisabled() {
+      return this.currentPage >= this.totalPages;
+    },
+    itemsFoundText() {
+      if (this.totalItems === 1) return `Found 1 agency`;
+      return `Found ${this.totalItems} agencies`;
+    }
   },
   methods: {
     ...mapActions("agencies", ["fetchAgencies"]),
@@ -212,10 +245,12 @@ export default {
         search: this.search,
         featured: this.featured,
         agency_type,
-        country_code
+        country_code,
+        offset: this.offset
       });
 
       await this.fetchAgencies(this.filterParams);
+      this.setCurrentPage();
     },
     reset() {
       this.$refs.agenciesForm.reset();
@@ -244,6 +279,25 @@ export default {
       this.featured = this.agenciesFiltes.featured;
       this.agencyType = this.agenciesFiltes.agencyType;
       this.country = this.agenciesFiltes.country;
+    },
+    // Pagination
+    setCurrentPage() {
+      this.totalItems = this.agencyMeta.count;
+
+      const { currentPage, totalPages } = pagination({
+        currentOffset: this.offset,
+        totalItems: this.totalItems,
+        limit: this.limit
+      });
+
+      this.currentPage = currentPage;
+      this.totalPages = totalPages;
+    },
+    async setPage(page) {
+      this.offset = (page - 1) * this.limit;
+      this.totalPages = Math.ceil(this.totalItems / this.limit);
+
+      await this.fetchFiltered();
     }
   }
 };
