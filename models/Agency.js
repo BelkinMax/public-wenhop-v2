@@ -17,12 +17,14 @@ class Agency {
   image_url = "";
 
   constructor(attributes) {
-    setAttributes(attributes, this);
+    if (attributes) {
+      setAttributes(attributes, this);
 
-    // Add thumbnail placeholder if no img url
-    if (!this.image_url) {
-      this.image_url =
-        "https://maximbelkin.s3.eu-central-1.amazonaws.com/placeholder.jpg";
+      // Add thumbnail placeholder if no img url
+      if (!this.image_url) {
+        this.image_url =
+          "https://maximbelkin.s3.eu-central-1.amazonaws.com/placeholder.jpg";
+      }
     }
   }
 

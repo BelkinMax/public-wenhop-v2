@@ -26,8 +26,8 @@
           <v-list-item-title>Wenhop Wiki</v-list-item-title>
         </template>
 
-        <v-list-item v-for="([title, url], i) in wiki" :key="i" link :to="url">
-          <v-list-item-title>{{ title }}</v-list-item-title>
+        <v-list-item v-for="(item, i) in wiki" :key="i" link :to="item.to">
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
       </v-list-group>
     </v-list>
@@ -38,7 +38,10 @@
 export default {
   data() {
     return {
-      wiki: [["Space Agencies", "/wiki/agencies"]]
+      wiki: [
+        { title: "Space Agencies", to: "/wiki/agencies" },
+        { title: "Astronauts", to: "/wiki/astronauts" }
+      ]
     };
   }
 };

@@ -32,11 +32,13 @@ class Astronaut {
   // TODO: Create a constructor that can set values deep
 
   constructor(attributes) {
-    setAttributes(attributes, this);
+    if (attributes) {
+      setAttributes(attributes, this);
 
-    this.agency = new Agency(attributes.agency);
-    this.status = attributes.status; // TODO: Create class for status
-    this.type = attributes.type; // TODO: Create class for type
+      this.agency = new Agency(attributes.agency);
+      this.status = attributes.status; // TODO: Create class for status
+      this.type = attributes.type; // TODO: Create class for type
+    }
   }
 }
 
