@@ -1,4 +1,4 @@
-import StoreError from "@/models/StoreError";
+import StoreError from "@/models/helpers/StoreError";
 
 export const AGENCY_TYPES = idOrName => {
   const types = [

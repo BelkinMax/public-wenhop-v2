@@ -1,5 +1,5 @@
 import ApiRoutes from "@/helpers/ApiRoutes";
-import StoreError from "@/models/StoreError";
+import StoreError from "@/models/helpers/StoreError";
 import { AgenciesParams } from "@/helpers/ApiParams";
 
 export const actions = {

@@ -1,7 +1,4 @@
-export class AgenciesParams {
-  featured = false;
-  agency_type = 0;
-  country_code = "";
+class BaseParams {
   search = "";
   ordering = "";
   limit = 10;
@@ -25,5 +22,28 @@ export class AgenciesParams {
         if (key in this) this[key] = attributes[key];
       });
     }
+  }
+}
+
+export class AgenciesParams extends BaseParams {
+  featured = false;
+  agency_type = 0;
+  country_code = "";
+
+  constructor() {
+    super();
+  }
+}
+export class AstronautsParams extends BaseParams {
+  status = "";
+  agency__abbrev = "";
+  date_of_death = "";
+  name = "";
+  nationality = "";
+  date_of_birth = "";
+  agency__name = "";
+
+  constructor() {
+    super();
   }
 }

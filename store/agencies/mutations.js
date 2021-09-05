@@ -1,4 +1,4 @@
-import StoreError from "@/models/StoreError";
+import StoreError from "@/models/helpers/StoreError";
 import Agency from "@/models/Agency";
 
 const SET_AGENCIES = (state, data) => {

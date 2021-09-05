@@ -1,5 +1,7 @@
+import { setAttributes } from "@/helpers/SetAttributes";
+
 class Agency {
-  id = null;
+  id = 0;
   url = "";
   name = "";
   featured = false;
@@ -15,11 +17,7 @@ class Agency {
   image_url = "";
 
   constructor(attributes) {
-    if (attributes) {
-      Object.keys(attributes).forEach(key => {
-        if (key in this) this[key] = attributes[key];
-      });
-    }
+    setAttributes(attributes, this);
 
     // Add thumbnail placeholder if no img url
     if (!this.image_url) {
