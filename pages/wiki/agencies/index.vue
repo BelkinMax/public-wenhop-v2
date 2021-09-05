@@ -162,7 +162,7 @@ export default {
         "https://maximbelkin.s3.eu-central-1.amazonaws.com/placeholder.jpg",
 
       search: "",
-      featured: true,
+      featured: false,
       agencyType: "",
       allAgencyTypes: [],
       country: "",
