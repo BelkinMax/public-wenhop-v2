@@ -3,12 +3,20 @@
     <section class="row">
       <div class="col-12">
         <v-toolbar flat>
+          <v-checkbox
+            v-model="featured"
+            label="Show only featured agencies"
+            hide-details
+            class="mr-6"
+          ></v-checkbox>
+
           <v-text-field
             v-model="search"
             hide-details
             prepend-icon="mdi-magnify"
             single-line
             placeholder="Type something e.g. Spacex, Roscosmos, Blue Origin"
+            class="mr-6"
           ></v-text-field>
 
           <v-menu v-model="menu" :close-on-content-click="false" offset-x>
@@ -21,11 +29,6 @@
             <v-card>
               <v-card-text>
                 <v-form ref="agenciesForm">
-                  <v-checkbox
-                    v-model="featured"
-                    label="Featured agencies only"
-                  ></v-checkbox>
-
                   <v-select
                     v-model="agencyType"
                     :items="allAgencyTypes"
@@ -124,6 +127,8 @@
 </template>
 
 <script>
+// TODO: Make pagination
+
 import { mapActions, mapGetters, mapMutations } from "vuex";
 
 import { AGENCY_TYPES } from "@/helpers/ApiConfig";
@@ -141,7 +146,7 @@ export default {
       alphaCodes: new Alpha3Codes(),
 
       search: "",
-      featured: false,
+      featured: true,
       agencyType: "",
       allAgencyTypes: [],
       country: "",
@@ -159,6 +164,9 @@ export default {
         }, this.awaitingDelay);
       }
       this.awaitingSearch = true;
+    },
+    featured: function() {
+      this.fetchFiltered();
     }
   },
   async mounted() {
@@ -169,7 +177,7 @@ export default {
     await this.fetchFiltered();
   },
   computed: {
-    ...mapGetters("agencies", ["agencies", "agenciesFiltes"])
+    ...mapGetters("agencies", ["agencies", "agenciesFiltes", "agencyMeta"])
   },
   methods: {
     ...mapActions("agencies", ["fetchAgencies"]),

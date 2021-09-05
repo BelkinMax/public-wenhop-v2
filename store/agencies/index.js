@@ -20,7 +20,7 @@ const state = () => {
 
     filters: {
       search: "",
-      featured: false,
+      featured: true,
       agencyType: "",
       country: "",
       itemsPerPage: 9
