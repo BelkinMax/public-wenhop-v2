@@ -1,116 +1,125 @@
 <template>
-  <div class="row">
-    <div class="col-12">
-      <v-toolbar flat>
-        <v-text-field
-          v-model="search"
-          hide-details
-          prepend-icon="mdi-magnify"
-          single-line
-          placeholder="Type something e.g. Spacex, Roscosmos, Blue Origin"
-        ></v-text-field>
+  <div>
+    <section class="row">
+      <div class="col-12">
+        <v-toolbar flat>
+          <v-text-field
+            v-model="search"
+            hide-details
+            prepend-icon="mdi-magnify"
+            single-line
+            placeholder="Type something e.g. Spacex, Roscosmos, Blue Origin"
+          ></v-text-field>
 
-        <v-menu v-model="menu" :close-on-content-click="false" offset-x>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-filter-variant</v-icon>
-            </v-btn>
-          </template>
+          <v-menu v-model="menu" :close-on-content-click="false" offset-x>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-filter-variant</v-icon>
+              </v-btn>
+            </template>
 
-          <v-card>
-            <v-card-text>
-              <v-form ref="agenciesForm">
-                <v-checkbox
-                  v-model="featured"
-                  label="Featured agencies only"
-                ></v-checkbox>
+            <v-card>
+              <v-card-text>
+                <v-form ref="agenciesForm">
+                  <v-checkbox
+                    v-model="featured"
+                    label="Featured agencies only"
+                  ></v-checkbox>
 
-                <v-select
-                  v-model="agencyType"
-                  :items="allAgencyTypes"
-                  label="Agency type"
-                  clearable
-                  hide-selected
-                ></v-select>
+                  <v-select
+                    v-model="agencyType"
+                    :items="allAgencyTypes"
+                    label="Agency type"
+                    clearable
+                    hide-selected
+                  ></v-select>
 
-                <v-autocomplete
-                  v-model="country"
-                  :items="allCountries"
-                  label="Country"
-                  clearable
-                  hide-selected
-                ></v-autocomplete>
+                  <v-autocomplete
+                    v-model="country"
+                    :items="allCountries"
+                    label="Country"
+                    clearable
+                    hide-selected
+                  ></v-autocomplete>
 
-                <v-select
-                  v-model="itemsPerPage"
-                  :items="itemsPerPageVariants"
-                  label="Items per page"
-                  hide-selected
-                ></v-select>
+                  <v-select
+                    v-model="itemsPerPage"
+                    :items="itemsPerPageVariants"
+                    label="Items per page"
+                    hide-selected
+                  ></v-select>
 
-                <v-btn
-                  color="success"
-                  class="mr-4"
-                  small
-                  rounded
-                  @click="fetchFiltered"
-                >
-                  Filter
-                </v-btn>
+                  <v-btn
+                    color="success"
+                    class="mr-4"
+                    small
+                    rounded
+                    @click="fetchFiltered"
+                  >
+                    Filter
+                  </v-btn>
 
-                <v-btn
-                  color="primary"
-                  class="mr-4"
-                  small
-                  rounded
-                  @click="reset"
-                >
-                  Reset Filters
-                </v-btn>
+                  <v-btn
+                    color="primary"
+                    class="mr-4"
+                    small
+                    rounded
+                    @click="reset"
+                  >
+                    Reset Filters
+                  </v-btn>
 
-                <v-btn
-                  color="secondary"
-                  class="mr-4"
-                  small
-                  rounded
-                  @click="close"
-                >
-                  Cancel
-                </v-btn>
-              </v-form>
-            </v-card-text>
-          </v-card>
-        </v-menu>
-      </v-toolbar>
-    </div>
-    <div v-for="(agency, idx) in agencies" :key="idx" class="col-4">
-      <v-card class="mx-auto" height="100%">
-        <v-card-text>
-          <div class="row">
-            <div class="col-12 dense-p">
-              <p class="text-h4 text--primary">
-                {{ agency.name }}
-              </p>
-            </div>
-            <div class="col-12 dense-p">
-              <p>{{ agency.type }} Organization</p>
-              <p v-if="agency.country_code">
-                from {{ getCountryName(agency.country_code) }}.
-              </p>
-              <p v-if="agency.parent">Owned by {{ agency.parent }}</p>
-              <p v-if="agency.administrator">
-                Administrated by {{ agency.administratorData.name }}
-              </p>
-            </div>
-            <div class="col-12">
-              <div class="text--primary">
-                {{ agency.description }}
+                  <v-btn
+                    color="secondary"
+                    class="mr-4"
+                    small
+                    rounded
+                    @click="close"
+                  >
+                    Cancel
+                  </v-btn>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </v-toolbar>
+      </div>
+    </section>
+    <section class="row">
+      <div v-for="agency in agencies" :key="agency.id" class="col-4">
+        <v-card hover class="mx-auto" height="100%">
+          <v-img
+            :src="agency.image_url"
+            class="white--text align-end"
+            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.9)"
+            height="200px"
+          >
+            <v-card-title style="word-break: normal;">{{
+              agency.name
+            }}</v-card-title>
+          </v-img>
+          <v-card-text>
+            <div class="row">
+              <div class="col-12 dense-p">
+                <p>{{ agency.type }} Organization</p>
+                <p v-if="agency.country_code">
+                  from {{ getCountryName(agency.country_code) }}.
+                </p>
+                <p v-if="agency.parent">Owned by {{ agency.parent }}</p>
+                <p v-if="agency.administrator">
+                  Administrated by {{ agency.administratorData.name }}
+                </p>
+              </div>
+              <div class="col-12">
+                <div class="text--primary">
+                  {{ agency.description }}
+                </div>
               </div>
             </div>
-          </div>
-        </v-card-text>
-      </v-card>
-    </div>
+          </v-card-text>
+        </v-card>
+      </div>
+    </section>
   </div>
 </template>
 
