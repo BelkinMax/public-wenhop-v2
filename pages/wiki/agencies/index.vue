@@ -180,14 +180,14 @@ export default {
     search: function() {
       if (!this.awaitingSearch) {
         setTimeout(() => {
-          this.fetchFiltered();
+          this.fetchFiltered({ keepCurrentPage: false });
           this.awaitingSearch = false;
         }, this.awaitingDelay);
       }
       this.awaitingSearch = true;
     },
     featured: function() {
-      this.fetchFiltered();
+      this.fetchFiltered({ keepCurrentPage: false });
     },
     currentPage: function(val) {
       this.setPage(val);
@@ -198,7 +198,7 @@ export default {
     this.allCountries = this.alphaCodes.all;
     this.getFiltersFromStore();
 
-    await this.fetchFiltered();
+    await this.fetchFiltered({ keepCurrentPage: false });
   },
   computed: {
     ...mapGetters("agencies", ["agencies", "agenciesFiltes", "agencyMeta"]),
@@ -218,7 +218,8 @@ export default {
     ...mapActions("agencies", ["fetchAgencies"]),
     ...mapMutations("agencies", ["SET_AGENCIES_FILTERS"]),
 
-    async fetchFiltered() {
+    async fetchFiltered(params) {
+      const { keepCurrentPage } = params;
       this.SET_AGENCIES_FILTERS({
         search: this.search,
         featured: this.featured,
@@ -250,14 +251,19 @@ export default {
       });
 
       await this.fetchAgencies(this.filterParams);
-      this.setCurrentPage();
+
+      if (keepCurrentPage) {
+        this.setCurrentPage();
+      } else {
+        this.setFirstPage();
+      }
     },
     reset() {
       this.$refs.agenciesForm.reset();
       this.limit = 9;
       this.search = "";
       this.close();
-      this.fetchFiltered();
+      this.fetchFiltered({ keepCurrentPage: false });
     },
     close() {
       this.menu = false;
@@ -293,11 +299,23 @@ export default {
       this.currentPage = currentPage;
       this.totalPages = totalPages;
     },
+    setFirstPage() {
+      this.totalItems = this.agencyMeta.count;
+
+      const { currentPage, totalPages } = pagination({
+        currentOffset: 0,
+        totalItems: this.totalItems,
+        limit: this.limit
+      });
+
+      this.currentPage = currentPage;
+      this.totalPages = totalPages;
+    },
     async setPage(page) {
       this.offset = (page - 1) * this.limit;
       this.totalPages = Math.ceil(this.totalItems / this.limit);
 
-      await this.fetchFiltered();
+      await this.fetchFiltered({ keepCurrentPage: true });
     }
   }
 };
