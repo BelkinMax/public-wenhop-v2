@@ -106,23 +106,53 @@
             }}</v-card-title>
           </v-img>
           <v-card-text>
-            <div class="row">
-              <div class="col-12 dense-p">
-                <p>{{ agency.type }} Organization</p>
-                <p v-if="agency.country_code">
-                  from {{ getCountryName(agency.country_code) }}.
-                </p>
-                <p v-if="agency.parent">Owned by {{ agency.parent }}</p>
-                <p v-if="agency.administrator">
-                  Administrated by {{ agency.administratorData.name }}
-                </p>
-              </div>
-              <div class="col-12">
-                <div class="text--primary">
+            <v-list dense>
+              <!-- type -->
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-account-group</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content v-if="agency.type">
+                  {{ agency.type }} Organization
+                </v-list-item-content>
+                <v-list-item-content v-else>
+                  Unknown
+                </v-list-item-content>
+              </v-list-item>
+              <!-- country -->
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-earth</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content v-if="agency.country_code">
+                  {{ getCountryName(agency.country_code) }}
+                </v-list-item-content>
+                <v-list-item-content v-else>
+                  Unknown
+                </v-list-item-content>
+              </v-list-item>
+              <!-- agministrator -->
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-account-tie</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content v-if="agency.administrator">
+                  {{ agency.administratorData.name }}
+                </v-list-item-content>
+                <v-list-item-content v-else>
+                  Unknown
+                </v-list-item-content>
+              </v-list-item>
+              <!-- description -->
+              <v-list-item>
+                <v-list-item-subtitle v-if="agency.description">
                   {{ agency.description }}
-                </div>
-              </div>
-            </div>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle v-else>
+                  No description available...
+                </v-list-item-subtitle>
+              </v-list-item>
+            </v-list>
           </v-card-text>
         </v-card>
       </div>
@@ -178,6 +208,7 @@ export default {
   },
   watch: {
     search: function() {
+      // Await user search input
       if (!this.awaitingSearch) {
         setTimeout(() => {
           this.fetchFiltered({ keepCurrentPage: false });
@@ -189,8 +220,12 @@ export default {
     featured: function() {
       this.fetchFiltered({ keepCurrentPage: false });
     },
-    currentPage: function(val) {
-      this.setPage(val);
+    currentPage: function(page) {
+      this.offset = (page - 1) * this.limit;
+      this.totalPages = Math.ceil(this.totalItems / this.limit);
+
+      this.fetchFiltered({ keepCurrentPage: true });
+      this.scrollToTop();
     }
   },
   async mounted() {
@@ -277,6 +312,11 @@ export default {
         resultArr.push(this.alphaCodes.getByKey(abbr));
       });
 
+      if (resultArr.length > 3) {
+        return `${resultArr.slice(0, 3).join(", ")} and ${resultArr.length -
+          3} more`;
+      }
+
       return resultArr.join(", ");
     },
     getFiltersFromStore() {
@@ -311,11 +351,9 @@ export default {
       this.currentPage = currentPage;
       this.totalPages = totalPages;
     },
-    async setPage(page) {
-      this.offset = (page - 1) * this.limit;
-      this.totalPages = Math.ceil(this.totalItems / this.limit);
-
-      await this.fetchFiltered({ keepCurrentPage: true });
+    // Scroll top
+    scrollToTop() {
+      window.scrollTo(0, 0);
     }
   }
 };

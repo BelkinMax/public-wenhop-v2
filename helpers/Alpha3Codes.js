@@ -1,4 +1,14 @@
 export class Alpha3Codes {
+  USA = "United States of America (USA)";
+  EUR = "European Union (EU)";
+  CHN = "China";
+  RUS = "Russian Federation";
+  JPN = "Japan";
+  GBR = "United Kingdom (UK)";
+  IND = "India";
+  CAN = "Canada";
+  DEU = "Germany";
+  FRA = "France";
   AFG = "Afghanistan";
   ALA = "Åland Islands";
   ALB = "Albania";
@@ -40,12 +50,10 @@ export class Alpha3Codes {
   CPV = "Cabo Verde";
   KHM = "Cambodia";
   CMR = "Cameroon";
-  CAN = "Canada";
   CYM = "Cayman Islands";
   CAF = "Central African Republic";
   TCD = "Chad";
   CHL = "Chile";
-  CHN = "China";
   HKG = "Hong Kong";
   MAC = "Macao";
   CXR = "Christmas Island";
@@ -79,7 +87,6 @@ export class Alpha3Codes {
   FRO = "Faroe Islands";
   FJI = "Fiji";
   FIN = "Finland";
-  FRA = "France";
   GUF = "French Guiana";
   PYF = "French Polynesia";
   ATF = "French Southern Territories";
@@ -105,7 +112,6 @@ export class Alpha3Codes {
   HND = "Honduras";
   HUN = "Hungary";
   ISL = "Iceland";
-  IND = "India";
   IDN = "Indonesia";
   IRN = "Iran";
   IRQ = "Iraq";
@@ -114,7 +120,6 @@ export class Alpha3Codes {
   ISR = "Israel";
   ITA = "Italy";
   JAM = "Jamaica";
-  JPN = "Japan";
   JEY = "Jersey";
   JOR = "Jordan";
   KAZ = "Kazakhstan";
@@ -182,7 +187,6 @@ export class Alpha3Codes {
   MDA = "Republic of Moldova";
   REU = "Réunion";
   ROU = "Romania";
-  RUS = "Russian Federation";
   RWA = "Rwanda";
   BLM = "Saint Barthélemy";
   SHN = "Saint Helena";
@@ -232,10 +236,8 @@ export class Alpha3Codes {
   UGA = "Uganda";
   UKR = "Ukraine";
   ARE = "United Arab Emirates";
-  GBR = "United Kingdom (UK)";
   TZA = "Tanzania";
   UMI = "Minor Outlying Islands";
-  USA = "United States of America (USA)";
   VIR = "Virgin Islands";
   URY = "Uruguay";
   UZB = "Uzbekistan";
@@ -251,10 +253,6 @@ export class Alpha3Codes {
   constructor() {}
 
   getByKey(key) {
-    // Fix api Germany abbr bug
-    if (key === "DEU") return this.GER;
-    //
-
     if (this[key]) return this[key];
 
     return "";

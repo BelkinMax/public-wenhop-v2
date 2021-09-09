@@ -12,3 +12,10 @@
 <script>
 export default {};
 </script>
+
+<style lang="scss">
+html,
+body {
+  scroll-behavior: smooth;
+}
+</style>
