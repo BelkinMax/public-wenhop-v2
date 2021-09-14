@@ -94,7 +94,12 @@
     </section>
     <section class="row">
       <div v-for="agency in agencies" :key="agency.id" class="col-4">
-        <v-card hover class="mx-auto" height="100%">
+        <v-card
+          hover
+          class="mx-auto"
+          height="100%"
+          @click="openItem(agency.id)"
+        >
           <v-img
             :src="agency.image_url || agencyPlaceholder"
             class="white--text align-end"
@@ -125,7 +130,16 @@
                   <v-icon>mdi-earth</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content v-if="agency.country_code">
-                  {{ getCountryName(agency.country_code) }}
+                  <v-tooltip bottom max-width="300px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getCountryName(agency.country_code, "short") }}
+                      </span>
+                    </template>
+                    <span>
+                      {{ getCountryName(agency.country_code, "full") }}
+                    </span>
+                  </v-tooltip>
                 </v-list-item-content>
                 <v-list-item-content v-else>
                   Unknown
@@ -166,6 +180,81 @@
         ></v-pagination>
       </div>
     </section>
+    <!-- Popup item -->
+    <v-row justify="center">
+      <v-dialog v-model="popupItem" scrollable>
+        <v-card v-if="openedItemId" hover class="mx-auto" height="100%">
+          <v-img
+            :src="openedItem.image_url || agencyPlaceholder"
+            class="white--text align-end"
+            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.9)"
+            height="200px"
+          >
+            <v-card-title style="word-break: normal;">{{
+              openedItem.name
+            }}</v-card-title>
+          </v-img>
+          <v-card-text>
+            <v-list dense>
+              <!-- type -->
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-account-group</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content v-if="openedItem.type">
+                  {{ openedItem.type }} Organization
+                </v-list-item-content>
+                <v-list-item-content v-else>
+                  Unknown
+                </v-list-item-content>
+              </v-list-item>
+              <!-- country -->
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-earth</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content v-if="openedItem.country_code">
+                  <v-tooltip bottom max-width="300px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getCountryName(openedItem.country_code, "short") }}
+                      </span>
+                    </template>
+                    <span>
+                      {{ getCountryName(openedItem.country_code, "full") }}
+                    </span>
+                  </v-tooltip>
+                </v-list-item-content>
+                <v-list-item-content v-else>
+                  Unknown
+                </v-list-item-content>
+              </v-list-item>
+              <!-- agministrator -->
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-account-tie</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content v-if="openedItem.administrator">
+                  {{ openedItem.administratorData.name }}
+                </v-list-item-content>
+                <v-list-item-content v-else>
+                  Unknown
+                </v-list-item-content>
+              </v-list-item>
+              <!-- description -->
+              <v-list-item>
+                <v-list-item-subtitle v-if="openedItem.description">
+                  {{ openedItem.description }}
+                </v-list-item-subtitle>
+                <v-list-item-subtitle v-else>
+                  No description available...
+                </v-list-item-subtitle>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </div>
 </template>
 
@@ -203,7 +292,10 @@ export default {
       totalItems: 0,
       currentPage: 1,
       totalPages: 0,
-      offset: 0
+      offset: 0,
+
+      popupItem: false,
+      openedItemId: null
     };
   },
   watch: {
@@ -247,12 +339,20 @@ export default {
     itemsFoundText() {
       if (this.totalItems === 1) return `Found 1 agency`;
       return `Found ${this.totalItems} agencies`;
+    },
+    openedItem() {
+      if (this.agencies && this.agencies.length)
+        return this.agencies.find(el => el.id === this.openedItemId);
     }
   },
   methods: {
     ...mapActions("agencies", ["fetchAgencies"]),
     ...mapMutations("agencies", ["SET_AGENCIES_FILTERS"]),
 
+    openItem(id) {
+      this.openedItemId = id;
+      this.popupItem = true;
+    },
     async fetchFiltered(params) {
       const { keepCurrentPage } = params;
       this.SET_AGENCIES_FILTERS({
@@ -303,7 +403,7 @@ export default {
     close() {
       this.menu = false;
     },
-    getCountryName(key) {
+    getCountryName(key, type) {
       const keys = key.split(",");
       const resultArr = [];
 
@@ -312,9 +412,9 @@ export default {
         resultArr.push(this.alphaCodes.getByKey(abbr));
       });
 
-      if (resultArr.length > 3) {
-        return `${resultArr.slice(0, 3).join(", ")} and ${resultArr.length -
-          3} more`;
+      if (resultArr.length > 2 && type === "short") {
+        return `${resultArr.slice(0, 2).join(", ")} and ${resultArr.length -
+          2} more`;
       }
 
       return resultArr.join(", ");
